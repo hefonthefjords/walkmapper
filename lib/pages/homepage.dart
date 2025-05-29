@@ -152,7 +152,9 @@ class _GoogleMapsFlutterState extends State<HomePage> {
                                
                             ),
                             ElevatedButton.icon(
-                              onPressed: null, 
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const CurrentWalkPage()));
+                              }, 
                               label: Text("Begin A Walk", style: TextStyle(fontSize: 20)), 
                             ),
                           ],
