@@ -25,6 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- MAPS API KEY -->
+         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDynlWR-s_-ybP8aIEPjPyxMZwFntvXNCY" />
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
