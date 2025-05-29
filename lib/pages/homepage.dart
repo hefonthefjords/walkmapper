@@ -25,14 +25,14 @@ class _GoogleMapsFlutterState extends State<HomePage> {
     // Request permission
     final foregroundPermission = await perm.Permission.locationWhenInUse.request();
     if (!foregroundPermission.isGranted) {
-      final locationAlwaysPermission = await perm.Permission.locationAlways.request();
-      if (!locationAlwaysPermission.isGranted) {
+      //final locationAlwaysPermission = await perm.Permission.locationAlways.request();
+      //if (!locationAlwaysPermission.isGranted) {
          _getCurrentLocation();
-      }
+     // }
     }
 
-     _location.enableBackgroundMode(enable: true);
-     if (await _location.hasPermission() == PermissionStatus.granted){
+    _location.enableBackgroundMode(enable: true);
+    if (await _location.hasPermission() == PermissionStatus.granted){
 
     // Check if location service is enabled
     final serviceEnabled = await _location.serviceEnabled();
@@ -56,6 +56,7 @@ class _GoogleMapsFlutterState extends State<HomePage> {
       // Move camera to current location
       if (_mapController != null && _currentPosition != null) {
         _mapController!.animateCamera(
+          duration: Duration(milliseconds: 300),
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: _currentPosition!,
@@ -73,14 +74,12 @@ class _GoogleMapsFlutterState extends State<HomePage> {
   
   @override
   Widget build(BuildContext context) {
-    return //SafeArea(
-    //   maintainBottomViewPadding: true,
-    //   child: 
-        Scaffold(
-
+    return Scaffold(
           appBar: AppBar(
-            title: const Text('|', textAlign:TextAlign.center,),
+            title: const Text('Walk Mapper'),
             centerTitle: true,
+            backgroundColor: Colors.lightBlueAccent,
+            foregroundColor: Colors.white,
             ),
           body: _isLoading ? 
               const Center(child: CircularProgressIndicator()) 
@@ -90,73 +89,89 @@ class _GoogleMapsFlutterState extends State<HomePage> {
                     'Location permission denied'
                   )
                 )
-              : SingleChildScrollView(        
+              //: SingleChildScrollView( child:
+                : SafeArea(
+                  //left: false,
+                  //right: false,
+                  minimum: EdgeInsets.fromLTRB(0,50,0,75),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 200,
-                        height: 200,
-                        margin: EdgeInsets.all(15),
-                        child: 
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(300),
-                          child:
-                          GoogleMap(
-                          initialCameraPosition: 
-                          CameraPosition(
-                            target: _currentPosition!,
-                            zoom: 18.0,
-                          ),
-                          zoomControlsEnabled: false,
-                          myLocationEnabled: true,
-                          scrollGesturesEnabled: false,
-                          rotateGesturesEnabled: false,
-                          zoomGesturesEnabled: false,
-                          myLocationButtonEnabled: false,
-                          mapType: MapType.hybrid,
-                          compassEnabled: false,
-                          fortyFiveDegreeImageryEnabled: false,
-                          buildingsEnabled: false,
-                          onMapCreated: (GoogleMapController controller) {
-                            _mapController = controller;
-                          },
-                          // floatingActionButton: FloatingActionButton(
-                          // onPressed: _getCurrentLocation,
-                          // child: const Icon(Icons.my_location), 
-                          ),
-                          )
-                          
-                      ),
-                      Text("Things and stuff"),
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton.icon(
-                            onPressed: null, 
-                            label: Text("OOH A BUTTON"), 
-                          ),
-                          ElevatedButton.icon(
-                            onPressed: null, 
-                            label: Text("OOH A BUTTON"), 
-                          ),
-                        ],
-                      ),
-                    // Image.asset(
-                    //   'assets/images/kirby.jpg',
-                    //   fit: BoxFit.cover,
-                    // ),
-                    // Image.asset(
-                    //   'assets/images/walking_stickman.gif',
-                    //   fit: BoxFit.cover,
-                    // ),
-                  
-                  ]
-                  )
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Text("You are here:", style: TextStyle(fontSize: 28)),
+                                Container(
+                                  width: 200,
+                                  height: 200,
+                                  margin: EdgeInsets.all(15),
+                                  child: 
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(300),
+                                      child:
+                                      GoogleMap(
+                                      initialCameraPosition: 
+                                      CameraPosition(
+                                        target: _currentPosition!,
+                                        zoom: 25.0,
+                                      ),
+                                      zoomControlsEnabled: false,
+                                      myLocationEnabled: true,
+                                      scrollGesturesEnabled: false,
+                                      rotateGesturesEnabled: false,
+                                      zoomGesturesEnabled: false,
+                                      myLocationButtonEnabled: false,
+                                      mapType: MapType.hybrid,
+                                      compassEnabled: false,
+                                      fortyFiveDegreeImageryEnabled: false,
+                                      buildingsEnabled: false,
+                                      // onMapCreated: (GoogleMapController controller) {
+                                      //   _mapController = controller;
+                                      // },
+                                      // floatingActionButton: FloatingActionButton(
+                                      // onPressed: _getCurrentLocation,
+                                      // child: const Icon(Icons.my_location), 
+                                      ),
+                                      )
+                                    
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: null, 
+                              label: Text("Previous Walks", style: TextStyle(fontSize: 20)),
+                               
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: null, 
+                              label: Text("Begin A Walk", style: TextStyle(fontSize: 20)), 
+                            ),
+                          ],
+                        ),
+                      // Image.asset(
+                      //   'assets/images/kirby.jpg',
+                      //   fit: BoxFit.cover,
+                      // ),
+                      // Image.asset(
+                      //   'assets/images/walking_stickman.gif',
+                      //   fit: BoxFit.cover,
+                      // ),
+                    
+                    ]
+                    ),
                 )
+                );
           // ),
       // ],
-    );
   }
   
   @override
