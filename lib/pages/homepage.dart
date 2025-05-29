@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart' as perm;
+import 'package:walkmapper/pages/currentwalkpage.dart';
 
 
 class HomePage extends StatefulWidget {
