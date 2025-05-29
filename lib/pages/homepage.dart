@@ -25,11 +25,14 @@ class _GoogleMapsFlutterState extends State<HomePage> {
     // Request permission
     final foregroundPermission = await perm.Permission.locationWhenInUse.request();
     if (!foregroundPermission.isGranted) {
-      _getCurrentLocation();
+      final locationAlwaysPermission = await perm.Permission.locationAlways.request();
+      if (!locationAlwaysPermission.isGranted) {
+         _getCurrentLocation();
+      }
     }
 
-    _location.enableBackgroundMode(enable: true);
-    if (await _location.hasPermission() == PermissionStatus.granted){
+     _location.enableBackgroundMode(enable: true);
+     if (await _location.hasPermission() == PermissionStatus.granted){
 
     // Check if location service is enabled
     final serviceEnabled = await _location.serviceEnabled();
