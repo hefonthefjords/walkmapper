@@ -78,22 +78,32 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   // Toggle tracking & manage walk sessions
   void _toggleTracking() {
     setState(() {
+      // if not currently tracking
       if (!_isTracking) {
+        // create a new walk object
         _currentWalk = Walk();
-        _currentWalk?.changeWalkTitle(DateTime.now().toIso8601String()); // Create a new walk session
-      } else {
+        // assign the walk title to be the datetime string by default
+        _currentWalk?.changeWalkTitle(_currentWalk!.walkStartTime.toIso8601String());
+        // set the first waypoint as the current position manually so that waypoint[0] is always the starting location
+        _currentWalk?.addWaypoint(_currentPosition!);
+      } 
+      else {
+        // if we are currently tracking then a walk has been recorded
         if (_currentWalk != null) {
+          // store the current walk as a completed walk in the completed walks list
           _completedWalks.add(_currentWalk!); // Save completed walk
+          // review the completed walks that have been stored DEBUG
+          reviewCompletedWalks();
         }
       }
       _isTracking = !_isTracking;
     });
   }
 
-  // View completed walks (for future implementation)
-  void _viewCompletedWalks() {
-    for (var walk in _completedWalks) {
-      print("Walk recorded at ${walk.walkTitle} with ${walk.waypoints.length} waypoints recorded.");
+  // DEBUG: print completed walks data to console
+  void reviewCompletedWalks() {
+    for (Walk walk in _completedWalks) {
+      print("Walk startetd at ${walk.walkStartTime.toIso8601String()} titled \"${walk.walkTitle} has ${walk.waypoints.length} waypoints recorded.");
     }
   }
 
@@ -145,12 +155,8 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton.icon(
-                            onPressed: _viewCompletedWalks,
-                            label: const Text("View Previous Walks"),
-                          ),
-                          ElevatedButton.icon(
                             onPressed: _toggleTracking,
-                            label: Text(_isTracking ? "Stop Tracking" : "Begin Tracking"),
+                            label: Text(_isTracking ? "End Recording your Walk" : "Begin Recording Your Walk"),
                           ),
                         ],
                       ),

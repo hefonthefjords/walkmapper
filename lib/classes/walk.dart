@@ -8,6 +8,8 @@ class Walk {
 
   String walkTitle = "";
   List<LatLng> waypoints = [];
+  late DateTime walkStartTime = DateTime.now();
+  late DateTime walkEndTime;
   double totalTravelDistanceMetres = 0.0;
   double totalTravelDistanceMiles = 0.0;
   double maxDistanceFromStartMetres = 0.0;
@@ -15,6 +17,7 @@ class Walk {
   double totalElevationChangeMetres = 0.0;
   List<File> walkPhotos = [];
 
+  
   void changeWalkTitle (String title){
     walkTitle = title;
   }
