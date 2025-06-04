@@ -150,10 +150,11 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
           ? const Center(child: CircularProgressIndicator())
           : _currentPosition == null
               ? const Center(child: Text('Location permission denied'))
-              : SingleChildScrollView(
+              : SafeArea(
+                minimum: EdgeInsets.fromLTRB(0, 0, 0, 75),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         width: MediaQuery.sizeOf(context).width,
@@ -182,15 +183,18 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                           ),
                         ),
                       ),
-                      Text("Total Distance Walked: ${_currentWalk?.totalTravelDistanceMetres} metres"),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      _currentWalk?.totalTravelDistanceMetres == null || !_isTracking ?
+                      Text("") :
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ElevatedButton.icon(
-                            onPressed: _toggleTracking,
-                            label: Text(_isTracking ? "End Recording your Walk" : "Begin Recording Your Walk"),
-                          ),
+                          Text("Current Walk Stats", style: TextStyle(fontWeight: FontWeight.bold),),
+                          Text("Total Distance Walked: ${_currentWalk?.totalTravelDistanceMetres} metres"),
                         ],
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: _toggleTracking,
+                        label: Text(_isTracking ? "End Recording your Walk" : "Begin Recording Your Walk"),
                       ),
                     ],
                   ),
