@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -16,9 +15,10 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   final Location _location = Location();
   LatLng? _currentPosition;
   bool _isLoading = true;
-  Walk _walk = Walk(); // Create Walk instance
+  Walk? _currentWalk; // Active walk instance
   bool _isTracking = false;
-  Set<Polyline> _polylines = {}; // Set to store waypoints as a polyline
+  Set<Polyline> _polylines = {}; // Stores active walk path
+  List<Walk> _completedWalks = []; // List to store completed walks
 
   @override
   void initState() {
@@ -53,61 +53,48 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
         );
       }
 
-      // **Save waypoint if tracking is active & update polyline**
-      if (_isTracking) {
-        _walk.addWaypoint(_currentPosition!);
+      // **Save waypoints only when tracking is active**
+      if (_isTracking && _currentWalk != null) {
+        _currentWalk!.addWaypoint(_currentPosition!);
         _updatePolyline();
       }
     });
   }
 
-  // Update polyline when waypoints change
+  // Update polyline visualization
   void _updatePolyline() {
     setState(() {
       _polylines = {
         Polyline(
           polylineId: PolylineId('walk_route'),
-          points: _walk.waypoints,
+          points: _currentWalk?.waypoints ?? [],
           color: Colors.blue,
           width: 5,
         ),
       };
-      _zoomToFitPolyline();
     });
   }
 
-  // Toggle tracking on button press
+  // Toggle tracking & manage walk sessions
   void _toggleTracking() {
     setState(() {
-      _isTracking = !_isTracking;
       if (!_isTracking) {
-        _updatePolyline(); // Ensure final path is displayed when stopping
+        _currentWalk = Walk(); // Create a new walk session
+      } else {
+        if (_currentWalk != null) {
+          _completedWalks.add(_currentWalk!); // Save completed walk
+        }
       }
+      _isTracking = !_isTracking;
     });
   }
 
-  void _zoomToFitPolyline() {
-  if (_walk.waypoints.isEmpty || _mapController == null) return;
-
-  double minLat = _walk.waypoints.first.latitude;
-  double minLng = _walk.waypoints.first.longitude;
-  double maxLat = _walk.waypoints.first.latitude;
-  double maxLng = _walk.waypoints.first.longitude;
-
-  for (LatLng point in _walk.waypoints) {
-    if (point.latitude < minLat) minLat = point.latitude;
-    if (point.latitude > maxLat) maxLat = point.latitude;
-    if (point.longitude < minLng) minLng = point.longitude;
-    if (point.longitude > maxLng) maxLng = point.longitude;
+  // View completed walks (for future implementation)
+  void _viewCompletedWalks() {
+    for (var walk in _completedWalks) {
+      print("Walk with ${walk.waypoints.length} waypoints recorded.");
+    }
   }
-
-  LatLngBounds bounds = LatLngBounds(
-    southwest: LatLng(minLat, minLng),
-    northeast: LatLng(maxLat, maxLng),
-  );
-
-  _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
-}
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +132,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                             mapType: MapType.hybrid,
                             compassEnabled: false,
                             buildingsEnabled: false,
-                            polylines: _polylines, // Show recorded waypoints as polyline
+                            polylines: _polylines, // Show recorded path
                             onMapCreated: (GoogleMapController controller) {
                               _mapController = controller;
                             },
@@ -157,8 +144,8 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton.icon(
-                            onPressed: null,
-                            label: const Text("nuffin yet"),
+                            onPressed: _viewCompletedWalks,
+                            label: const Text("View Previous Walks"),
                           ),
                           ElevatedButton.icon(
                             onPressed: _toggleTracking,
