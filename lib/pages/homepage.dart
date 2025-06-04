@@ -67,7 +67,7 @@ class _GoogleMapsFlutterState extends State<HomePage> {
               : SafeArea(
                   minimum: EdgeInsets.fromLTRB(0, 50, 0, 75),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -78,11 +78,11 @@ class _GoogleMapsFlutterState extends State<HomePage> {
                             children: [
                               const Text("You are here:", style: TextStyle(fontSize: 28)),
                               Container(
-                                width: 200,
-                                height: 200,
+                                width: MediaQuery.sizeOf(context).width * 0.9,
+                                height: MediaQuery.sizeOf(context).height * 0.3,
                                 margin: EdgeInsets.all(15),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(300),
+                                  borderRadius: BorderRadius.circular(25),
                                   child: GoogleMap(
                                     initialCameraPosition: CameraPosition(
                                       target: _currentPosition!,
@@ -111,15 +111,11 @@ class _GoogleMapsFlutterState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton.icon(
-                            onPressed: null,
-                            label: const Text("Previous Walks", style: TextStyle(fontSize: 20)),
-                          ),
-                          ElevatedButton.icon(
                             onPressed: () {
                               Navigator.push(
                                   context, MaterialPageRoute(builder: (context) => const CurrentWalkPage()));
                             },
-                            label: const Text("Begin A Walk", style: TextStyle(fontSize: 20)),
+                            label: const Text("Begin A New Walk", style: TextStyle(fontSize: 20)),
                           ),
                         ],
                       ),
