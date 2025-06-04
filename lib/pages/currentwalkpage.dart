@@ -79,7 +79,8 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   void _toggleTracking() {
     setState(() {
       if (!_isTracking) {
-        _currentWalk = Walk(); // Create a new walk session
+        _currentWalk = Walk();
+        _currentWalk?.changeWalkTitle(DateTime.now().toIso8601String()); // Create a new walk session
       } else {
         if (_currentWalk != null) {
           _completedWalks.add(_currentWalk!); // Save completed walk
@@ -92,7 +93,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   // View completed walks (for future implementation)
   void _viewCompletedWalks() {
     for (var walk in _completedWalks) {
-      print("Walk with ${walk.waypoints.length} waypoints recorded.");
+      print("Walk recorded at ${walk.walkTitle} with ${walk.waypoints.length} waypoints recorded.");
     }
   }
 
