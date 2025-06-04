@@ -73,7 +73,39 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
         ),
       };
     });
+    _zoomToFitPolyline();
   }
+
+  void _zoomToFitPolyline() {
+  if (_currentWalk!.waypoints.isEmpty || _mapController == null) {
+    _mapController!.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+          zoom: 18.0
+        )
+      )
+    );
+  }
+  double minLat = _currentWalk!.waypoints.first.latitude;
+  double minLng = _currentWalk!.waypoints.first.longitude;
+  double maxLat = _currentWalk!.waypoints.first.latitude;
+  double maxLng = _currentWalk!.waypoints.first.longitude;
+
+  for (LatLng point in _currentWalk!.waypoints) {
+    if (point.latitude < minLat) minLat = point.latitude;
+    if (point.latitude > maxLat) maxLat = point.latitude;
+    if (point.longitude < minLng) minLng = point.longitude;
+    if (point.longitude > maxLng) maxLng = point.longitude;
+  }
+
+  LatLngBounds bounds = LatLngBounds(
+    southwest: LatLng(minLat, minLng),
+    northeast: LatLng(maxLat, maxLng),
+  );
+
+  _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
+}
 
   // Toggle tracking & manage walk sessions
   void _toggleTracking() {
@@ -150,7 +182,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                           ),
                         ),
                       ),
-                      const Text("Things and stuff"),
+                      Text("Total Distance Walked: ${_currentWalk?.totalTravelDistanceMetres} metres"),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [

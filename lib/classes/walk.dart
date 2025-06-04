@@ -81,7 +81,8 @@ class Walk {
       totalDistance += R * c; 
     }
 
-    return totalDistance; // Returns total distance in meters
+    // return the distance rounded to one decimal place
+    return double.parse(totalDistance.toStringAsFixed(1)); 
   }
 
 
