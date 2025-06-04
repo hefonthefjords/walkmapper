@@ -194,7 +194,19 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                       ),
                       ElevatedButton.icon(
                         onPressed: _toggleTracking,
-                        label: Text(_isTracking ? "End Recording your Walk" : "Begin Recording Your Walk"),
+                        label: Text(_isTracking ? "End Recording your Walk" : "Begin Recording Your Walk", 
+                        style:
+                          _isTracking
+                          ? TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.bold, 
+                          fontSize: 20,
+                          )
+                          : TextStyle(
+                          fontWeight: FontWeight.bold, 
+                          fontSize: 20,
+                          ),
+                        ), 
                       ),
                     ],
                   ),
