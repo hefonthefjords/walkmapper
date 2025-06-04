@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -76,7 +78,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
         Scaffold(
 
           appBar: AppBar(
-            title: const Text('|', textAlign:TextAlign.center,),
+            title: const Text('Your Current Walk', textAlign:TextAlign.center,),
             centerTitle: true,
             ),
           body: _isLoading ? 
@@ -93,12 +95,14 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 200,
-                        height: 200,
+                        width: MediaQuery.sizeOf(context).width,
+                        height: MediaQuery.sizeOf(context).height * 0.6,
+                        //width: 200,
+                        //height: 200,
                         margin: EdgeInsets.all(15),
                         child: 
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(300),
+                          borderRadius: BorderRadius.circular(25),
                           child:
                           GoogleMap(
                           initialCameraPosition: 
@@ -131,11 +135,21 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                         children: [
                           ElevatedButton.icon(
                             onPressed: null, 
-                            label: Text("OOH A BUTTON"), 
+                            label: Text("nuffin yet"), 
                           ),
-                          ElevatedButton.icon(
-                            onPressed: null, 
-                            label: Text("OOH A BUTTON"), 
+                          Builder(
+                            builder: (context) {
+                              // if (){
+                                
+                              // }
+                              // else {
+                                
+                              // }
+                              return ElevatedButton.icon(
+                                onPressed: null, 
+                                label: Text("Begin Tracking"),
+                              );
+                            }
                           ),
                         ],
                       ),

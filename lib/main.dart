@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:walkmapper/pages/homepage.dart';
+import 'package:walkmapper/pages/currentwalkpage.dart';
+
 // import 'package:flutter_config/flutter_config.dart';
 
 void main() async {
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const HomePage(
+      home: const CurrentWalkPage(
         //title: 'Flutter Demo Home Page'
         ),
     );
