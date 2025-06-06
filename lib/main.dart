@@ -20,6 +20,7 @@ void main() async {
   boxWalk = await Hive.openBox<Walk>("boxWalk");
   WidgetsFlutterBinding.ensureInitialized();
 
+  // initialise app
   runApp(const MyApp());
 }
 
