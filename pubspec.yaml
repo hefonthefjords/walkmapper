@@ -37,6 +37,12 @@ dependencies:
   google_maps_flutter: ^2.12.2
   location: ^8.0.0
   permission_handler: ^12.0.0+1
+  gallery_saver_plus: ^3.2.4
+  image_picker: ^1.1.2
+  exif: ^3.3.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  geocoding: ^4.0.0
 
 
 dev_dependencies:
@@ -49,6 +55,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.15
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
