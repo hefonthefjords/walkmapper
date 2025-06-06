@@ -1,4 +1,4 @@
-# walkmapper
+# Walk Mapper
 
 As uni is finished now, I figured I better learn something else.
 
@@ -34,4 +34,4 @@ I only have android devices to test with just now. Might borrow a mac off someon
 ![New Walk Page](Screenshots/Screenshot_20250606-152707.jpg)
 
 ### Recording a Walk Interface
-![Recording a Walk](Screenshots/Screenshot_20250606-152726.jpg)
+![Recording a Walk](Screenshots/Screenshot_20250606-152726.jpg) 
