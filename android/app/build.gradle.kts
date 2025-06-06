@@ -5,6 +5,14 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+def googleMapsApiKey = localProperties.getProperty('googleMapsApiKey')
+if (googleMapsApiKey == null) {
+   googleMapsApiKey = System.getenv("GOOGLE_MAPS_API_KEY_ENVIRONMENT_VARIABLE")
+}
+
+
 android {
     namespace = "com.example.walkmapper"
     compileSdk = flutter.compileSdkVersion
@@ -28,6 +36,11 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // injects maps api key into android manifest
+        manifestPlaceholders = [
+        googleMapsApiKey       : googleMapsApiKey
+        ]
     }
 
     buildTypes {
@@ -42,3 +55,5 @@ android {
 flutter {
     source = "../.."
 }
+
+
