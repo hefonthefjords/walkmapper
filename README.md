@@ -23,3 +23,15 @@ A mobile application for android that allows users to record their walking route
 
 Should be a bit of fun.
 I only have android devices to test with just now. Might borrow a mac off someone later to try iphone builds.
+
+
+## Current UI Screenshots
+
+### Homepage
+![Homepage](Screenshots/Screenshot_20250606-152654.jpg)
+
+### New Walk Page
+![New Walk Page](Screenshots/Screenshot_20250606-152707.jpg)
+
+### Recording a Walk Interface
+![Recording a Walk](Screenshots/Screenshot_20250606-152726.jpg)
