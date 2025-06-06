@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -5,13 +7,11 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-def localProperties = new Properties()
-localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-def googleMapsApiKey = localProperties.getProperty('googleMapsApiKey')
-if (googleMapsApiKey == null) {
-   googleMapsApiKey = System.getenv("GOOGLE_MAPS_API_KEY_ENVIRONMENT_VARIABLE")
-}
-
+// Import google maps API key
+val localProperties = Properties()
+localProperties.load(rootProject.file("local.properties").inputStream())
+var googleMapsApiKey = localProperties.getProperty("googleMapsApiKey")
+    ?: System.getenv("GOOGLE_MAPS_API_KEY_ENVIRONMENT_VARIABLE")
 
 android {
     namespace = "com.example.walkmapper"
@@ -27,6 +27,10 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.walkmapper"
@@ -37,10 +41,9 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
 
-        // injects maps api key into android manifest
-        manifestPlaceholders = [
-        googleMapsApiKey       : googleMapsApiKey
-        ]
+        // Inject Google Maps API key
+        buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"$googleMapsApiKey\"")
+        manifestPlaceholders["googleMapsApiKey"] = googleMapsApiKey
     }
 
     buildTypes {
@@ -55,5 +58,3 @@ android {
 flutter {
     source = "../.."
 }
-
-
