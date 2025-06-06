@@ -1,8 +1,10 @@
 # walkmapper
 
-As uni is finished I figured I better learn something else now so, this project is just a bit of a mess around to learn how the Flutter framework and Dart language behave.
+As uni is finished now, I figured I better learn something else.
 
-Mobile application for android that allows users to record their walking routes using GPS data overlaid onto Google Maps.
+This project is just a bit of a mess around to learn how the Flutter framework and Dart language behave.
+
+A mobile application for android that allows users to record their walking routes using GPS data overlaid onto Google Maps.
 
 ## Basic feature objectives are:
 
