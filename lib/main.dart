@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:walkmapper/classes/boxes.dart';
 import 'package:walkmapper/classes/latlng_adapter.dart';
@@ -19,6 +20,11 @@ void main() async {
   Hive.registerAdapter(LatLngAdapterAdapter());
   boxWalk = await Hive.openBox<Walk>("boxWalk");
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Lock to portrait mode
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, 
+  ]);
 
   runApp(const MyApp());
 }
