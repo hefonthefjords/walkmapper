@@ -7,6 +7,7 @@ import 'package:walkmapper/classes/boxes.dart';
 import 'package:walkmapper/classes/takephotos.dart';
 import 'package:walkmapper/classes/walk.dart';
 import 'package:walkmapper/pages/currentwalkpage.dart';
+import 'package:walkmapper/pages/reviewwalkslistpage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -72,11 +73,11 @@ class _GoogleMapsFlutterState extends State<HomePage> {
               : _currentPosition == null
               ? const Center(child: Text('Location permission denied'))
               : SafeArea(
-                minimum: EdgeInsets.fromLTRB(0, 50, 0, 75),
+                minimum: EdgeInsets.fromLTRB(0, 0, 0, 75),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -89,7 +90,7 @@ class _GoogleMapsFlutterState extends State<HomePage> {
                             ),
                             Container(
                               width: MediaQuery.sizeOf(context).width * 0.9,
-                              height: MediaQuery.sizeOf(context).height * 0.3,
+                              height: MediaQuery.sizeOf(context).height * 0.5,
                               margin: EdgeInsets.all(15),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(25),
@@ -151,12 +152,12 @@ class _GoogleMapsFlutterState extends State<HomePage> {
                                 style: TextStyle(fontSize: 20),
                               ),
                               onPressed: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => const CurrentWalkPage(),
-                                //   ),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ReviewWalksListPage(),
+                                  ),
+                                );
                               },
                             ),
                           ],
@@ -196,47 +197,7 @@ class _GoogleMapsFlutterState extends State<HomePage> {
                       ],
                     ),
 
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.all(25.0),
-                        child: Card(
-                          child: Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: ListView.builder(
-                              itemCount: boxWalk.length,
-                              itemBuilder: (context, index) {
-                                Walk walk = boxWalk.getAt(index);
-                                return ListTile(
-                                  tileColor: Colors.blue[100],
-                                  iconColor: Colors.red[700],
-                                  dense: true,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  leading: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        boxWalk.deleteAt(index);
-                                      });
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete_forever,
-                                      size: 32,
-                                    ),
-                                  ),
-
-                                  //title: Text(walk.walkTitle),
-                                  //subtitle: const Text("Title"),
-                                  trailing: Text(
-                                    "Date: ${walk.walkStartTime.toLocal()}",
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    
                   ],
                 ),
               ),
