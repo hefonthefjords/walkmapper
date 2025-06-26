@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as loc;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart' as perm;
 import 'package:walkmapper/classes/boxes.dart';
 import 'package:walkmapper/classes/latlng_adapter.dart';
+import 'package:walkmapper/classes/takephotos.dart';
 import 'package:walkmapper/classes/walk.dart'; // Import Walk class
 
 // import hive.dart for storage - maybe not needed????
@@ -213,7 +215,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                   children: [
                     Container(
                       width: MediaQuery.sizeOf(context).width,
-                      height: MediaQuery.sizeOf(context).height * 0.6,
+                      height: MediaQuery.sizeOf(context).height * 0.5,
                       margin: EdgeInsets.all(15),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(25),
@@ -255,8 +257,20 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                               "# of Waypoints Recorded : ${_currentWalk?.waypoints.length}",
                             ),
                             Text("Current Address: $addy"),
+
+                            ElevatedButton.icon(
+                              icon: Icon(Icons.camera_alt),
+                              label: const Text(
+                                "Take A Photo",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              onPressed: () async {
+                                await takePhoto(ImageSource.camera);
+                              },
+                            ),
                           ],
                         ),
+                        
                     ElevatedButton.icon(
                       onPressed: _toggleTracking,
                       label: Text(
