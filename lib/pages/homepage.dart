@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart' as perm;
 import 'package:walkmapper/classes/boxes.dart';
+import 'package:walkmapper/classes/takephotos.dart';
 import 'package:walkmapper/classes/walk.dart';
 import 'package:walkmapper/pages/currentwalkpage.dart';
 
@@ -17,6 +19,7 @@ class _GoogleMapsFlutterState extends State<HomePage> {
   final Location _location = Location();
   LatLng? _currentPosition;
   bool _isLoading = true;
+  //TakePhotos takePhotos = TakePhotos();
 
   @override
   void initState() {
@@ -116,25 +119,83 @@ class _GoogleMapsFlutterState extends State<HomePage> {
                         ),
                       ],
                     ),
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const CurrentWalkPage(),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton.icon(
+                              icon: Icon(Icons.directions_walk_outlined),
+                              label: const Text(
+                                "Start A Walk",
+                                style: TextStyle(fontSize: 20),
                               ),
-                            );
-                          },
-                          label: const Text(
-                            "Begin A New Walk",
-                            style: TextStyle(fontSize: 20),
-                          ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => const CurrentWalkPage(),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(height: 25),
+                            ElevatedButton.icon(
+                              icon: Icon(Icons.person_pin_circle_sharp),
+                              label: const Text(
+                                "Review Walks",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              onPressed: () {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => const CurrentWalkPage(),
+                                //   ),
+                                // );
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 25),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton.icon(
+                              icon: Icon(Icons.camera_alt),
+                              label: const Text(
+                                "Take A Photo",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              onPressed: () async {
+                                await takePhoto(ImageSource.camera);
+                              },
+                            ),
+                            SizedBox(height: 25),
+                            ElevatedButton.icon(
+                              icon: Icon(Icons.photo),
+                              label: const Text(
+                                "Browse Photos",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              onPressed: () {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => const CurrentWalkPage(),
+                                //   ),
+                                // );
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
+
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.all(25.0),
@@ -145,17 +206,23 @@ class _GoogleMapsFlutterState extends State<HomePage> {
                               itemCount: boxWalk.length,
                               itemBuilder: (context, index) {
                                 Walk walk = boxWalk.getAt(index);
-                                return ListTile(tileColor: Colors.blue[100],
+                                return ListTile(
+                                  tileColor: Colors.blue[100],
                                   iconColor: Colors.red[700],
                                   dense: true,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
                                   leading: IconButton(
                                     onPressed: () {
                                       setState(() {
                                         boxWalk.deleteAt(index);
                                       });
                                     },
-                                    icon: const Icon(Icons.delete_forever, size: 32),
+                                    icon: const Icon(
+                                      Icons.delete_forever,
+                                      size: 32,
+                                    ),
                                   ),
 
                                   //title: Text(walk.walkTitle),
