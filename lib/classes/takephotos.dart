@@ -36,7 +36,7 @@ Future takePhoto(ImageSource img) async {
     source: img,
     requestFullMetadata: true,
     preferredCameraDevice: CameraDevice.rear,
-    imageQuality: 100,
+    //imageQuality: 100,
   );
 
   // if the captured file is not null
@@ -52,7 +52,7 @@ Future takePhoto(ImageSource img) async {
 // save an image to the device gallery
 Future saveImageToGallery(XFile image) async {
   //await FlutterImageGallerySaver.saveFile(image.path);
-  await GallerySaver.saveImage(image.path, toDcim: true);
+  await GallerySaver.saveImage(image.path, toDcim: true, albumName: "Camera");
 }
 
 
