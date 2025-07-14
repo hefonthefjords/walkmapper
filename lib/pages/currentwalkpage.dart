@@ -26,7 +26,8 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   Walk? _currentWalk; // Active walk instance
   bool _isTracking = false;
   Set<Polyline> _polylines = {}; // Stores active walk path
-  List<Walk> _completedWalks = []; // List to store completed walks
+  // IS THIS NEEDED?
+  //List<Walk> _completedWalks = []; // List to store completed walks
   String addy = "";
 
   @override
@@ -166,8 +167,9 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
           // set final waypoint of walk
           _currentWalk?.addWaypoint(_currentPosition!);
 
+          // IS THIS NEEDED?
           // store the current walk as a completed walk in the completed walks list
-          _completedWalks.add(_currentWalk!); // Save completed walk
+          //_completedWalks.add(_currentWalk!); // Save completed walk
 
           // store completed walk in hive
           boxWalk.put("key_${_currentWalk!.walkTitle}", _currentWalk);
