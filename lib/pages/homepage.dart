@@ -3,9 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart' as perm;
-import 'package:walkmapper/classes/boxes.dart';
 import 'package:walkmapper/classes/takephotos.dart';
-import 'package:walkmapper/classes/walk.dart';
 import 'package:walkmapper/pages/currentwalkpage.dart';
 import 'package:walkmapper/pages/reviewwalkslistpage.dart';
 

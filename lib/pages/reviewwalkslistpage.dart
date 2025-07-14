@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:walkmapper/classes/boxes.dart';
 import 'package:walkmapper/classes/walk.dart';
-import 'package:walkmapper/pages/currentwalkpage.dart';
+
+import 'package:walkmapper/pages/walkreviewpage.dart';
 
 class ReviewWalksListPage extends StatefulWidget {
   const ReviewWalksListPage({super.key});
@@ -62,13 +63,14 @@ class _WalksListPageState extends State<ReviewWalksListPage> {
                                   iconColor: Colors.red[700],
                                   dense: true,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                                  leading: IconButton(
+                                  leading: ElevatedButton(
                                     onPressed: () {
                                       setState(() {
                                         boxWalk.deleteAt(index);
                                       });
                                     },
-                                    icon: const Icon(Icons.delete_forever, size: 32),
+                                    child: 
+                                      const Icon(Icons.delete_forever, size: 32, color: Color.fromARGB(255, 205, 42, 40),),
                                   ),
 
                                   //title: Text(walk.walkTitle),
@@ -76,6 +78,14 @@ class _WalksListPageState extends State<ReviewWalksListPage> {
                                   trailing: Text(
                                     "Date: ${walk.walkStartTime.toLocal()}",
                                   ),
+                                  onTap: () {
+                                     Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => WalkeReviewPage(walk: walk),
+                                  ),
+                                );
+                                  },
                                 );
                               },
                             ),
