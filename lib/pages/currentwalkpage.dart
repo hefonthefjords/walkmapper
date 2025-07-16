@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_background/flutter_background.dart';
 import 'package:geocoding/geocoding.dart' as loc;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,7 +34,9 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   @override
   void initState() {
     super.initState();
-    _requestPermission().then((_) => _trackUserLocation());
+    _requestPermission().then((_) async =>   
+    // enable running as background task
+    await FlutterBackground.enableBackgroundExecution().then( (_) =>_trackUserLocation()));
   }
 
   // Request location permission
@@ -88,10 +91,11 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
 
       if (placemarks.isNotEmpty) {
         loc.Placemark place = placemarks.first;
-        //print("${place.street}, ${place.locality}, ${place.country}");
         return "${place.street}, ${place.postalCode}";
       }
+
       return "";
+
     } catch (e) {
       print("Error: $e");
       return "";
@@ -150,6 +154,9 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
 
   // Toggle tracking & manage walk sessions
   void _toggleTracking() {
+
+    
+
     setState(() {
       // if not currently tracking
       if (!_isTracking) {
@@ -159,6 +166,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
         _currentWalk?.changeWalkTitle(
           _currentWalk!.walkStartTime.toIso8601String(),
         );
+        
         // set the first waypoint as the current position manually so that waypoint[0] is always the starting location
         _currentWalk?.addWaypoint(_currentPosition!);
       } else {
@@ -183,9 +191,13 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
           // review the completed walks that have been stored DEBUG
           // reviewCompletedWalks();
         }
+
+        
       }
       _isTracking = !_isTracking;
+      
     });
+
   }
 
   // DEBUG: print completed walks data to console
@@ -274,7 +286,9 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                         ),
                         
                     ElevatedButton.icon(
-                      onPressed: _toggleTracking,
+                      onPressed: () {
+                        _toggleTracking(); 
+                      },
                       label: Text(
                         _isTracking
                             ? "End Recording your Walk"
@@ -298,9 +312,10 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
     );
   }
 
-  // @override
-  // void dispose() {
-  //   _mapController?.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() async {
+    await FlutterBackground.disableBackgroundExecution();
+    _mapController?.dispose();
+    super.dispose();
+  }
 }
