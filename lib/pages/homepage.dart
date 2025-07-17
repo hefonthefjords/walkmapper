@@ -29,7 +29,7 @@ class _GoogleMapsFlutterState extends State<HomePage> {
   // Request location permission
   Future<void> _requestPermission() async {
     final foregroundPermission =
-        await perm.Permission.locationWhenInUse.request();
+        await perm.Permission.locationAlways.request();
     if (!foregroundPermission.isGranted) {
       return;
     }

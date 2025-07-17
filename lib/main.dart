@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -34,13 +36,21 @@ void main() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp, 
   ]);
+  
 
   // initialise app - with background task permission check
 
   bool hasPermissions = await FlutterBackground.initialize(androidConfig: androidConfig);
   
   if (hasPermissions) {
-    runApp(const MyApp());
+  
+    bool success = await FlutterBackground.enableBackgroundExecution();
+    if (success){
+      runApp(const MyApp());
+    }
+    else {
+      exit(1);
+    }
   }
   
 }
