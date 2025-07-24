@@ -27,16 +27,12 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   Walk? _currentWalk; // Active walk instance
   bool _isTracking = false;
   Set<Polyline> _polylines = {}; // Stores active walk path
-  // IS THIS NEEDED?
-  //List<Walk> _completedWalks = []; // List to store completed walks
   String addy = "";
 
   @override
   void initState() {
     super.initState();
     _requestPermission().then((_) async =>   
-    // enable running as background task
-    //await FlutterBackground.enableBackgroundExecution().then( (_) => 
     _trackUserLocation() );
     //);
   }
@@ -66,15 +62,6 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
         _currentPosition!.longitude,
       );
 
-      // if (_mapController != null && _isTracking) {
-      //   _mapController!.animateCamera(
-      //     CameraUpdate.newCameraPosition(
-      //       CameraPosition(target: _currentPosition!,
-      //       //zoom: 18.0
-      //       ),
-      //     ),
-      //   );
-      // }
 
       // **Save waypoints only when tracking is active**
       if (_isTracking && _currentWalk != null) {
@@ -99,6 +86,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
       return "";
 
     } catch (e) {
+      // need to do this in a more graceful way
       print("Error: $e");
       return "";
     }
@@ -177,21 +165,11 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
           // set final waypoint of walk
           _currentWalk?.addWaypoint(_currentPosition!);
 
-          // IS THIS NEEDED?
-          // store the current walk as a completed walk in the completed walks list
-          //_completedWalks.add(_currentWalk!); // Save completed walk
-
           // store completed walk in hive
           boxWalk.put("key_${_currentWalk!.walkTitle}", _currentWalk);
 
-          // set current walk to null
-          // _currentWalk = null;
-
           // wipe out polyline
           _polylines = {};
-
-          // review the completed walks that have been stored DEBUG
-          // reviewCompletedWalks();
         }
 
         
@@ -316,7 +294,6 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
 
   @override
   void dispose() async {
-    //await FlutterBackground.disableBackgroundExecution();
     _mapController?.dispose();
     super.dispose();
   }
