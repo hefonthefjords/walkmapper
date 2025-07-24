@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_background/flutter_background.dart';
 import 'package:geocoding/geocoding.dart' as loc;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,9 +8,6 @@ import 'package:walkmapper/classes/boxes.dart';
 import 'package:walkmapper/classes/latlng_adapter.dart';
 import 'package:walkmapper/classes/takephotos.dart';
 import 'package:walkmapper/classes/walk.dart'; // Import Walk class
-
-// import hive.dart for storage - maybe not needed????
-//import 'package:hive/hive.dart';
 
 class CurrentWalkPage extends StatefulWidget {
   const CurrentWalkPage({super.key});
@@ -62,10 +58,10 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
         _currentPosition!.longitude,
       );
 
-
       // **Save waypoints only when tracking is active**
       if (_isTracking && _currentWalk != null) {
         _currentWalk!.addWaypoint(_currentPosition!);
+        // add saving to the box here to prevent lost tracks on app crashes
         _updatePolyline();
       }
     });
@@ -82,7 +78,6 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
         loc.Placemark place = placemarks.first;
         return "${place.street}, ${place.postalCode}";
       }
-
       return "";
 
     } catch (e) {
@@ -122,6 +117,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
         ),
       );
     }
+
     double minLat = _currentWalk!.waypoints.first.latitude;
     double minLng = _currentWalk!.waypoints.first.longitude;
     double maxLat = _currentWalk!.waypoints.first.latitude;
@@ -145,14 +141,12 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   // Toggle tracking & manage walk sessions
   void _toggleTracking() {
 
-    
-
     setState(() {
       // if not currently tracking
       if (!_isTracking) {
         // create a new walk object
         _currentWalk = Walk();
-        // assign the walk title to be the datetime string by default
+        // assign the walk title as the datetime string by default
         _currentWalk?.changeWalkTitle(
           _currentWalk!.walkStartTime.toIso8601String(),
         );
@@ -171,13 +165,9 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
           // wipe out polyline
           _polylines = {};
         }
-
-        
       }
       _isTracking = !_isTracking;
-      
     });
-
   }
 
   // DEBUG: print completed walks data to console
