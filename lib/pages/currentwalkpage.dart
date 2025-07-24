@@ -36,7 +36,9 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
     super.initState();
     _requestPermission().then((_) async =>   
     // enable running as background task
-    await FlutterBackground.enableBackgroundExecution().then( (_) =>_trackUserLocation()));
+    //await FlutterBackground.enableBackgroundExecution().then( (_) => 
+    _trackUserLocation() );
+    //);
   }
 
   // Request location permission
@@ -127,7 +129,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
               _currentPosition!.latitude,
               _currentPosition!.longitude,
             ),
-            zoom: 18.0,
+            //zoom: 18.0,
           ),
         ),
       );
@@ -149,7 +151,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
       northeast: LatLng(maxLat, maxLng),
     );
 
-    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 275));
+    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 150));
   }
 
   // Toggle tracking & manage walk sessions
@@ -238,9 +240,9 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                             target: _currentPosition!,
                             zoom: 18.0,
                           ),
-                          zoomControlsEnabled: true,
+                          zoomControlsEnabled: false,
                           myLocationEnabled: true,
-                          scrollGesturesEnabled: true,
+                          scrollGesturesEnabled: false,
                           rotateGesturesEnabled: true,
                           zoomGesturesEnabled: true,
                           myLocationButtonEnabled: true,
@@ -291,8 +293,8 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                       },
                       label: Text(
                         _isTracking
-                            ? "End Recording your Walk"
-                            : "Begin Recording Your Walk",
+                            ? "End Recording Route"
+                            : "Begin Recording Route",
                         style:
                             _isTracking
                                 ? TextStyle(
@@ -314,7 +316,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
 
   @override
   void dispose() async {
-    await FlutterBackground.disableBackgroundExecution();
+    //await FlutterBackground.disableBackgroundExecution();
     _mapController?.dispose();
     super.dispose();
   }
