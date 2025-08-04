@@ -99,7 +99,7 @@ class _GoogleMapsFlutterState extends State<WalkeReviewPage> {
       northeast: LatLng(maxLat, maxLng),
     );
 
-    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 275));
+    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100));
   }
 
   @override
@@ -127,17 +127,19 @@ class _GoogleMapsFlutterState extends State<WalkeReviewPage> {
                         child: GoogleMap(
                           initialCameraPosition: CameraPosition(
                             target: widget.walk.waypoints[0].toLatLng(),
-                            zoom: 18.0,
                           ),
-                          zoomControlsEnabled: true,
+                          zoomControlsEnabled: false,
                           myLocationEnabled: false,
-                          scrollGesturesEnabled: true,
-                          rotateGesturesEnabled: true,
-                          zoomGesturesEnabled: true,
+                          scrollGesturesEnabled: false,
+                          rotateGesturesEnabled: false,
+                          zoomGesturesEnabled: false,
                           myLocationButtonEnabled: false,
                           mapType: MapType.hybrid,
-                          compassEnabled: true,
+                          compassEnabled: false,
                           buildingsEnabled: false,
+                          fortyFiveDegreeImageryEnabled: false,
+                          indoorViewEnabled: false,
+                          tiltGesturesEnabled: false,
                           polylines: _polylines, // Show recorded path
                           onMapCreated: (GoogleMapController controller) {
                             _mapController = controller;
