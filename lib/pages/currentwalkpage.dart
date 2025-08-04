@@ -9,9 +9,6 @@ import 'package:walkmapper/classes/latlng_adapter.dart';
 import 'package:walkmapper/classes/takephotos.dart';
 import 'package:walkmapper/classes/walk.dart'; // Import Walk class
 
-// import hive.dart for storage - maybe not needed????
-//import 'package:hive/hive.dart';
-
 class CurrentWalkPage extends StatefulWidget {
   const CurrentWalkPage({super.key});
   @override
@@ -26,20 +23,20 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   Walk? _currentWalk; // Active walk instance
   bool _isTracking = false;
   Set<Polyline> _polylines = {}; // Stores active walk path
-  // IS THIS NEEDED?
-  //List<Walk> _completedWalks = []; // List to store completed walks
   String addy = "";
 
   @override
   void initState() {
     super.initState();
-    _requestPermission().then((_) => _trackUserLocation());
+    _requestPermission().then((_) async =>   
+    _trackUserLocation() );
+    //);
   }
 
   // Request location permission
   Future<void> _requestPermission() async {
     final foregroundPermission =
-        await perm.Permission.locationWhenInUse.request();
+        await perm.Permission.locationAlways.request();
     if (!foregroundPermission.isGranted) {
       return;
     }
@@ -61,19 +58,10 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
         _currentPosition!.longitude,
       );
 
-      // if (_mapController != null && _isTracking) {
-      //   _mapController!.animateCamera(
-      //     CameraUpdate.newCameraPosition(
-      //       CameraPosition(target: _currentPosition!,
-      //       //zoom: 18.0
-      //       ),
-      //     ),
-      //   );
-      // }
-
       // **Save waypoints only when tracking is active**
       if (_isTracking && _currentWalk != null) {
         _currentWalk!.addWaypoint(_currentPosition!);
+        // add saving to the box here to prevent lost tracks on app crashes
         _updatePolyline();
       }
     });
@@ -88,11 +76,12 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
 
       if (placemarks.isNotEmpty) {
         loc.Placemark place = placemarks.first;
-        //print("${place.street}, ${place.locality}, ${place.country}");
         return "${place.street}, ${place.postalCode}";
       }
       return "";
+
     } catch (e) {
+      // need to do this in a more graceful way
       print("Error: $e");
       return "";
     }
@@ -123,11 +112,13 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
               _currentPosition!.latitude,
               _currentPosition!.longitude,
             ),
-            zoom: 18.0,
+            // manual zoom level not needed
+            //zoom: 18.0,
           ),
         ),
       );
     }
+
     double minLat = _currentWalk!.waypoints.first.latitude;
     double minLng = _currentWalk!.waypoints.first.longitude;
     double maxLat = _currentWalk!.waypoints.first.latitude;
@@ -145,20 +136,22 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
       northeast: LatLng(maxLat, maxLng),
     );
 
-    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 275));
+    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100));
   }
 
   // Toggle tracking & manage walk sessions
   void _toggleTracking() {
+
     setState(() {
       // if not currently tracking
       if (!_isTracking) {
         // create a new walk object
         _currentWalk = Walk();
-        // assign the walk title to be the datetime string by default
+        // assign the walk title as the datetime string by default
         _currentWalk?.changeWalkTitle(
           _currentWalk!.walkStartTime.toIso8601String(),
         );
+        
         // set the first waypoint as the current position manually so that waypoint[0] is always the starting location
         _currentWalk?.addWaypoint(_currentPosition!);
       } else {
@@ -167,21 +160,11 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
           // set final waypoint of walk
           _currentWalk?.addWaypoint(_currentPosition!);
 
-          // IS THIS NEEDED?
-          // store the current walk as a completed walk in the completed walks list
-          //_completedWalks.add(_currentWalk!); // Save completed walk
-
           // store completed walk in hive
           boxWalk.put("key_${_currentWalk!.walkTitle}", _currentWalk);
 
-          // set current walk to null
-          // _currentWalk = null;
-
           // wipe out polyline
           _polylines = {};
-
-          // review the completed walks that have been stored DEBUG
-          // reviewCompletedWalks();
         }
       }
       _isTracking = !_isTracking;
@@ -210,7 +193,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
               : _currentPosition == null
               ? const Center(child: Text('Location permission denied'))
               : SafeArea(
-                minimum: EdgeInsets.fromLTRB(0, 0, 0, 75),
+                minimum: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -226,9 +209,9 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                             target: _currentPosition!,
                             zoom: 18.0,
                           ),
-                          zoomControlsEnabled: true,
+                          zoomControlsEnabled: false,
                           myLocationEnabled: true,
-                          scrollGesturesEnabled: true,
+                          scrollGesturesEnabled: false,
                           rotateGesturesEnabled: true,
                           zoomGesturesEnabled: true,
                           myLocationButtonEnabled: true,
@@ -274,11 +257,13 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                         ),
                         
                     ElevatedButton.icon(
-                      onPressed: _toggleTracking,
+                      onPressed: () {
+                        _toggleTracking(); 
+                      },
                       label: Text(
                         _isTracking
-                            ? "End Recording your Walk"
-                            : "Begin Recording Your Walk",
+                            ? "End Recording Route"
+                            : "Begin Recording Route",
                         style:
                             _isTracking
                                 ? TextStyle(
@@ -298,9 +283,9 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
     );
   }
 
-  // @override
-  // void dispose() {
-  //   _mapController?.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() async {
+    _mapController?.dispose();
+    super.dispose();
+  }
 }
