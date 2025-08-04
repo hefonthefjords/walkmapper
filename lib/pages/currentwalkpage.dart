@@ -112,6 +112,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
               _currentPosition!.latitude,
               _currentPosition!.longitude,
             ),
+            // manual zoom level not needed
             //zoom: 18.0,
           ),
         ),
@@ -135,7 +136,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
       northeast: LatLng(maxLat, maxLng),
     );
 
-    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 150));
+    _mapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100));
   }
 
   // Toggle tracking & manage walk sessions
@@ -192,7 +193,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
               : _currentPosition == null
               ? const Center(child: Text('Location permission denied'))
               : SafeArea(
-                minimum: EdgeInsets.fromLTRB(0, 0, 0, 75),
+                minimum: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -206,7 +207,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                         child: GoogleMap(
                           initialCameraPosition: CameraPosition(
                             target: _currentPosition!,
-                            zoom: 18.0,
+                            //zoom: 18.0,
                           ),
                           zoomControlsEnabled: false,
                           myLocationEnabled: true,
