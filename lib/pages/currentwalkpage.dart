@@ -19,7 +19,6 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   GoogleMapController? _mapController;
   final Location _location = Location();
   LatLng? _currentPosition;
-  double? _currentHeading;
   bool _isLoading = true;
   Walk? _currentWalk; // Active walk instance
   bool _isTracking = false;
@@ -51,8 +50,6 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
           locationData.latitude!,
           locationData.longitude!,
         );
-        _currentHeading = locationData.heading!;
-        
         _isLoading = false;
       });
 
@@ -115,7 +112,6 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
               _currentPosition!.latitude,
               _currentPosition!.longitude,
             ),
-            bearing: _currentHeading!,
             // manual zoom level not needed
             //zoom: 18.0,
           ),
@@ -211,8 +207,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                         child: GoogleMap(
                           initialCameraPosition: CameraPosition(
                             target: _currentPosition!,
-                            //zoom: 18.0,
-                            
+                            zoom: 18.0,
                           ),
                           zoomControlsEnabled: false,
                           myLocationEnabled: true,
@@ -223,10 +218,6 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                           mapType: MapType.hybrid,
                           compassEnabled: true,
                           buildingsEnabled: false,
-                          fortyFiveDegreeImageryEnabled: false,
-                          indoorViewEnabled: false,
-                          tiltGesturesEnabled: false,
-
                           polylines: _polylines, // Show recorded path
                           onMapCreated: (GoogleMapController controller) {
                             _mapController = controller;
