@@ -25,11 +25,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // add background task things
-  final androidConfig = FlutterBackgroundAndroidConfig(
-    notificationTitle: "Background Task Example",
-    notificationText: "Running in the background",
-    notificationImportance: AndroidNotificationImportance.high,
-    enableWifiLock: true,
+  const androidConfig = FlutterBackgroundAndroidConfig(
+    notificationTitle: "Walk Mapper Background Service",
+    notificationText: "Walk Mapper is running in the background",
+    notificationImportance: AndroidNotificationImportance.max,
+    // enableWifiLock: true,
+     notificationIcon: AndroidResource(
+	    name: 'background_icon',
+	    defType: 'drawable'
+	  ),
   );
 
   // Lock to portrait mode
@@ -42,16 +46,24 @@ void main() async {
 
   bool hasPermissions = await FlutterBackground.initialize(androidConfig: androidConfig);
   
-  if (hasPermissions) {
+  // this is dumb but may be necessary on first run
+  if (!hasPermissions) {
+    hasPermissions = await FlutterBackground.initialize(androidConfig: androidConfig);
+  }
   
-    bool success = await FlutterBackground.enableBackgroundExecution();
-    if (success){
+  if (hasPermissions){
+  //bool success = await FlutterBackground.enableBackgroundExecution();
+  //if (success){
+    if (await FlutterBackground.enableBackgroundExecution()){
       runApp(const MyApp());
     }
+    // if you cant get background permission, exit the app
     else {
       exit(1);
     }
   }
+ 
+  
   
 }
 
@@ -61,7 +73,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Walk mApp',
+      title: 'Walk Mapper',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
