@@ -7,24 +7,57 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:walkmapper/main.dart';
+import 'package:walkmapper/widgets/walk_stats.dart';
+import 'package:walkmapper/widgets/map_controls.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('Widget Tests', () {
+    testWidgets('WalkStats widget displays correct information', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: WalkStats(
+            distance: 1000,
+            duration: const Duration(minutes: 15),
+            speed: 4.0,
+          ),
+        ),
+      );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      expect(find.text('Distance: 1.0 km'), findsOneWidget);
+      expect(find.text('Duration: 15:00'), findsOneWidget);
+      expect(find.text('Speed: 4.0 km/h'), findsOneWidget);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    testWidgets('MapControls widget responds to interactions', (WidgetTester tester) async {
+      bool zoomInCalled = false;
+      bool zoomOutCalled = false;
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: MapControls(
+            onZoomIn: () => zoomInCalled = true,
+            onZoomOut: () => zoomOutCalled = true,
+          ),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.add));
+      expect(zoomInCalled, true);
+
+      await tester.tap(find.byIcon(Icons.remove));
+      expect(zoomOutCalled, true);
+    });
+
+    testWidgets('Navigation drawer shows all menu items', (WidgetTester tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Current Walk'), findsOneWidget);
+      expect(find.text('History'), findsOneWidget);
+      expect(find.text('Settings'), findsOneWidget);
+    });
   });
 }

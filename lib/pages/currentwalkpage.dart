@@ -104,21 +104,24 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
 
   // zoom the map to fit the polyline of the recorded waypoints by calculating a bounding box
   void _zoomToFitPolyline() {
-    if (_currentWalk!.waypoints.isEmpty || _mapController == null) {
-      _mapController!.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(
-              _currentPosition!.latitude,
-              _currentPosition!.longitude,
+    if (_currentWalk == null || _currentWalk!.waypoints.isEmpty || _mapController == null) {
+      // If there are no waypoints or the map controller is null, center the map on the current position
+      if (_currentPosition != null) {
+        _mapController!.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(
+                _currentPosition!.latitude,
+                _currentPosition!.longitude,
+              ),
             ),
-            // manual zoom level not needed
-            //zoom: 18.0,
           ),
-        ),
-      );
+        );
+      }
+      return; // Exit early if there are no waypoints
     }
 
+    // Calculate the bounding box for the waypoints
     double minLat = _currentWalk!.waypoints.first.latitude;
     double minLng = _currentWalk!.waypoints.first.longitude;
     double maxLat = _currentWalk!.waypoints.first.latitude;
@@ -131,6 +134,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
       if (point.longitude > maxLng) maxLng = point.longitude;
     }
 
+    // Create bounds and animate the camera
     LatLngBounds bounds = LatLngBounds(
       southwest: LatLng(minLat, minLng),
       northeast: LatLng(maxLat, maxLng),
