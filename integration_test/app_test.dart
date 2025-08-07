@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:walkmapper/main.dart';
+import 'package:walkmapper/pages/homepage.dart';
 
 import '../test/mocks/location_mock.dart';
 
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'WalkMapper',
-      home: CurrentWalkPage(), // Adjust this to match your app's main page
+      home: HomePage(), // Replace with actual main widget
     );
   }
 }
@@ -27,6 +27,8 @@ final MyApp app = MyApp();
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  late MockGeolocator mockGeolocator;
 
   setUp(() {
     mockGeolocator = MockGeolocator();
