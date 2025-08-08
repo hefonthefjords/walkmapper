@@ -19,6 +19,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   GoogleMapController? _mapController;
   final Location _location = Location();
   LatLng? _currentPosition;
+  double? _currentHeading;
   bool _isLoading = true;
   Walk? _currentWalk; // Active walk instance
   bool _isTracking = false;
@@ -44,12 +45,21 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
 
   // Continuously track user's location & record waypoints if tracking is enabled
   void _trackUserLocation() {
+    _location.changeSettings(
+      accuracy: LocationAccuracy.high,
+      interval: 0, // Update every second
+      distanceFilter: 1,
+      pausesLocationUpdatesAutomatically: false, // Update on every movement
+    );
     _location.onLocationChanged.listen((LocationData locationData) async {
       setState(() {
+        // record current position as a LatLng object
         _currentPosition = LatLng(
           locationData.latitude!,
           locationData.longitude!,
         );
+        // record current heading
+        _currentHeading = locationData.heading;
         _isLoading = false;
       });
 
@@ -112,6 +122,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
               _currentPosition!.latitude,
               _currentPosition!.longitude,
             ),
+            bearing: _currentHeading ?? 270.0,
             // manual zoom level not needed
             //zoom: 18.0,
           ),

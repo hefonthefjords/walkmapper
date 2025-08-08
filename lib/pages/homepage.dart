@@ -37,6 +37,12 @@ class _GoogleMapsFlutterState extends State<HomePage> {
 
   // Continuously track user's location
   void _trackUserLocation() {
+    _location.changeSettings(
+      accuracy: LocationAccuracy.high,
+      interval: 1, // Update every second
+      distanceFilter: 1,
+      pausesLocationUpdatesAutomatically: false, // Update on every movement
+    );
     _location.onLocationChanged.listen((LocationData locationData) {
       setState(() {
         _currentPosition = LatLng(
