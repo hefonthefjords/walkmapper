@@ -114,21 +114,21 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
 
   // zoom the map to fit the polyline of the recorded waypoints by calculating a bounding box
   void _zoomToFitPolyline() {
-    if (_currentWalk!.waypoints.isEmpty || _mapController == null) {
-      _mapController!.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(
-              _currentPosition!.latitude,
-              _currentPosition!.longitude,
-            ),
-            bearing: _currentHeading ?? 270.0,
-            // manual zoom level not needed
-            //zoom: 18.0,
-          ),
-        ),
-      );
-    }
+    // if (_currentWalk!.waypoints.isEmpty || _mapController == null) {
+    //   _mapController!.animateCamera(
+    //     CameraUpdate.newCameraPosition(
+    //       CameraPosition(
+    //         target: LatLng(
+    //           _currentPosition!.latitude,
+    //           _currentPosition!.longitude,
+    //         ),
+    //         bearing: _currentHeading ?? 270.0,
+    //         // manual zoom level not needed
+    //         //zoom: 18.0,
+    //       ),
+    //     ),
+    //   );
+    // }
 
     double minLat = _currentWalk!.waypoints.first.latitude;
     double minLng = _currentWalk!.waypoints.first.longitude;
@@ -232,6 +232,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
                           polylines: _polylines, // Show recorded path
                           onMapCreated: (GoogleMapController controller) {
                             _mapController = controller;
+                            
                           },
                         ),
                       ),
