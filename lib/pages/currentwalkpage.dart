@@ -19,7 +19,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
   GoogleMapController? _mapController;
   final Location _location = Location();
   LatLng? _currentPosition;
-  double? _currentHeading;
+  //double? _currentHeading;
   bool _isLoading = true;
   Walk? _currentWalk; // Active walk instance
   bool _isTracking = false;
@@ -59,7 +59,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
           locationData.longitude!,
         );
         // record current heading
-        _currentHeading = locationData.heading;
+        //_currentHeading = locationData.heading;
         _isLoading = false;
       });
 
@@ -92,7 +92,7 @@ class _GoogleMapsFlutterState extends State<CurrentWalkPage> {
 
     } catch (e) {
       // need to do this in a more graceful way
-      print("Error: $e");
+      //print("Error: $e");
       return "";
     }
   }
