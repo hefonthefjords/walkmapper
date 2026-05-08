@@ -37,14 +37,15 @@ class Walk {
   }
 
 
-
-void addWaypoint(LatLng waypoint) {
+// this needs to be refactored to use the LocationData object type which contains much deeper location data 
+// (which includes things like speed, direction of travel and other things such as altitude and heading) which will allow far greater functionality
+void addWaypoint(LatLng waypoint) { 
   waypoints.add(LatLngAdapter(waypoint.latitude, waypoint.longitude)); // Convert before storing
 
   // record the timestamp of the most recently added waypoint as the walk end time in case no more waypoints are added
   walkEndTime = DateTime.now();
 
-  totalTravelDistanceMetres = calculateTotalDistanceMetres();
+  totalTravelDistanceMetres = calculateTravelDistanceMetres();
   totalTravelDistanceMiles = totalTravelDistanceMetres / 0.000621371;
 }
   // void addWaypoint(LatLng waypoint) {
@@ -84,7 +85,7 @@ List<LatLng> readWaypoints() {
     return walkPhotos;
   }
 
-  double calculateTotalDistanceMetres() {
+  double calculateTravelDistanceMetres() {
     // if there is only one waypoint then no travel has happened
     if (waypoints.length < 2) return 0.0;
 
@@ -111,7 +112,7 @@ List<LatLng> readWaypoints() {
       totalDistance += R * c;
     }
 
-    // return the distance rounded to one decimal place
+    // return the travel distance rounded to one decimal place
     return double.parse(totalDistance.toStringAsFixed(1));
   }
 }

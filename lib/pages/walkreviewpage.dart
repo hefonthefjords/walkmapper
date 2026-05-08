@@ -110,47 +110,67 @@ class _GoogleMapsFlutterState extends State<WalkeReviewPage> {
                           textAlign: TextAlign.center),
         centerTitle: true,
       ),
-      body:
-          
-               SafeArea(
-                minimum: EdgeInsets.fromLTRB(0, 0, 0, 75),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: MediaQuery.sizeOf(context).width,
-                      height: MediaQuery.sizeOf(context).height * 0.5,
-                      margin: EdgeInsets.all(15),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(25),
-                        child: GoogleMap(
-                          initialCameraPosition: CameraPosition(
-                            target: widget.walk.waypoints[0].toLatLng(),
-                          ),
-                          zoomControlsEnabled: false,
-                          myLocationEnabled: false,
-                          scrollGesturesEnabled: false,
-                          rotateGesturesEnabled: false,
-                          zoomGesturesEnabled: false,
-                          myLocationButtonEnabled: false,
-                          mapType: MapType.hybrid,
-                          compassEnabled: false,
-                          buildingsEnabled: false,
-                          fortyFiveDegreeImageryEnabled: false,
-                          indoorViewEnabled: false,
-                          tiltGesturesEnabled: false,
-                          polylines: _polylines, // Show recorded path
-                          onMapCreated: (GoogleMapController controller) {
-                            _mapController = controller;
-                            _updatePolyline();
-                          },
-                        ),
+      body:  
+            SafeArea(
+            minimum: EdgeInsets.fromLTRB(0, 0, 0, 75),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: MediaQuery.sizeOf(context).width,
+                  height: MediaQuery.sizeOf(context).height * 0.5,
+                  margin: EdgeInsets.all(15),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: GoogleMap(
+                      initialCameraPosition: CameraPosition(
+                        target: widget.walk.waypoints[0].toLatLng(),
                       ),
+                      zoomControlsEnabled: true,
+                      myLocationEnabled: false,
+                      scrollGesturesEnabled: true,
+                      rotateGesturesEnabled: true,
+                      zoomGesturesEnabled: true,
+                      myLocationButtonEnabled: false,
+                      mapType: MapType.hybrid,
+                      compassEnabled: false,
+                      buildingsEnabled: false,
+                      fortyFiveDegreeImageryEnabled: false,
+                      indoorViewEnabled: false,
+                      tiltGesturesEnabled: false,
+                      polylines: _polylines, // Show recorded path
+                      onMapCreated: (GoogleMapController controller) {
+                        _mapController = controller;
+                        _updatePolyline();
+                      },
                     ),
-                  ]
+                  ),
                 ),
-               ),
+                Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Current Walk Stats",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "Total Distance Walked: ${widget.walk.totalTravelDistanceMetres} metres",
+                            ),
+                            Text(
+                              "# of Waypoints Recorded: ${widget.walk.waypoints.length}",
+                            ),
+                            Text("Total Elevation Change: ${widget.walk.totalElevationChangeMetres}")
+              
+                          ],
+                        ),
+                
+                  ]),
+               
+              ),
+
+            
+            
     );
   }
 }
